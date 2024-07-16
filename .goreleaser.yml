@@ -1,0 +1,75 @@
+version: 2
+
+project_name: randgen
+
+env:
+  - GO111MODULE=on
+
+builds:
+
+  - id: randgen
+    binary: randgen
+    main: ./internal/main
+    targets:
+      - darwin_amd64
+      - darwin_arm64
+      - linux_amd64
+      - linux_arm64
+      - linux_arm
+      - windows_amd64
+      - windows_arm64
+    env:
+      - CGO_ENABLED=0
+    flags: "-mod=readonly"
+    ldflags:
+      - -X dev.shib.me/internal/commands.version={{.Version}}
+      - -X dev.shib.me/internal/commands.commitDate={{.CommitDate}}
+      - -X dev.shib.me/internal/commands.fullCommit={{.FullCommit}}
+      - -X dev.shib.me/internal/commands.releaseURL={{.ReleaseURL}}
+
+archives:
+  - id: randgen
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format: zip
+    builds:
+      - randgen
+
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-dev"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+nfpms:
+  - vendor: Shibly Meeran
+    homepage: https://shib.me
+    maintainer: Shibly Meeran <shibme@shib.me>
+    formats:
+      - apk
+      - deb
+      - rpm
+
+brews:
+  - ids:
+      - randgen
+    name: randgen
+    homepage: "https://dev.shib.me/randgen"
+    description: "RandGen is a simple CLI tool to generate random files of a given size."
+    license: "MIT"
+    commit_author:
+      name: Shibly Meeran
+      email: shibme@shib.me
+    repository:
+      owner: shibme
+      name: homebrew-lab
+      branch: main
+      git:
+        url: 'git@github.com:shibme/homebrew-lab.git'
+        private_key: '{{ .Env.HOMEBREW_SSH_KEY }}'

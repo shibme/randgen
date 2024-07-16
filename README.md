@@ -1,7 +1,7 @@
 # RandGen
 [![Go Reference](https://pkg.go.dev/badge/dev.shib.me/randgen.svg)](https://pkg.go.dev/dev.shib.me/randgen)
 [![Go Report Card](https://goreportcard.com/badge/dev.shib.me/randgen)](https://goreportcard.com/report/dev.shib.me/randgen)
-[![Release Status](https://github.com/shibme/randgen/actions/workflows/release.yml/badge.svg)](https://github.com/shibme/randgen/actions/workflows/release.yml)
+[![Release Status](https://github.com/shibme/randgen/actions/workflows/release.yaml/badge.svg)](https://github.com/shibme/randgen/actions/workflows/release.yaml)
 [![License](https://img.shields.io/github/license/shibme/randgen)](https://github.com/shibme/randgen/blob/main/LICENSE)
 
 RandGen is a simple CLI tool to generate random files of a given size.

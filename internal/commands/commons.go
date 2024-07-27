@@ -1,6 +1,12 @@
 package commands
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"os"
+
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
+)
 
 const (
 	appNameLowerCase = "randgen"
@@ -24,7 +30,9 @@ var (
 	releaseURL = ""
 	versionStr *string
 
-	genCmd     *cobra.Command
+	randgenCmd *cobra.Command
+	verifyCmd  *cobra.Command
+	serveCmd   *cobra.Command
 	versionCmd *cobra.Command
 )
 
@@ -51,4 +59,15 @@ var (
 		name:  "secure",
 		usage: "Use secure random generator",
 	}
+
+	portFlag = flagDef{
+		name:      "port",
+		shorthand: "p",
+		usage:     "Port to listen on",
+	}
 )
+
+func exitOnError(err error) {
+	fmt.Fprintln(os.Stderr, color.RedString(err.Error()))
+	os.Exit(1)
+}

@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"os"
 
 	"dev.shib.me/randgen"
 	"github.com/dustin/go-humanize"
@@ -10,16 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func exitOnError(err error) {
-	fmt.Fprintln(os.Stderr, color.RedString(err.Error()))
-	os.Exit(1)
-}
-
 func RandGenCommand() *cobra.Command {
-	if genCmd != nil {
-		return genCmd
+	if randgenCmd != nil {
+		return randgenCmd
 	}
-	genCmd = &cobra.Command{
+	randgenCmd = &cobra.Command{
 		Use:   appNameLowerCase,
 		Short: "Generate random files of a given size",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -30,17 +24,19 @@ func RandGenCommand() *cobra.Command {
 				exitOnError(err)
 			}
 			secure, _ := cmd.Flags().GetBool(secureFlag.name)
-			if err = randgen.CreateFile(filePath, size, secure); err != nil {
+			if err = randgen.CreateFile(filePath, int(size), secure); err != nil {
 				exitOnError(err)
 			}
 			fmt.Printf("File %s created successfully with size %s\n", color.GreenString(filePath), color.GreenString(humanize.Bytes(size)))
 		},
 	}
-	genCmd.Flags().StringP(fileFlag.name, fileFlag.shorthand, "", fileFlag.usage)
-	genCmd.Flags().StringP(sizeFlag.name, sizeFlag.shorthand, "", sizeFlag.usage)
-	genCmd.Flags().BoolP(secureFlag.name, secureFlag.shorthand, false, secureFlag.usage)
-	genCmd.MarkFlagRequired(fileFlag.name)
-	genCmd.MarkFlagRequired(sizeFlag.name)
-	genCmd.AddCommand(versionCommand())
-	return genCmd
+	randgenCmd.Flags().StringP(fileFlag.name, fileFlag.shorthand, "", fileFlag.usage)
+	randgenCmd.Flags().StringP(sizeFlag.name, sizeFlag.shorthand, "", sizeFlag.usage)
+	randgenCmd.Flags().BoolP(secureFlag.name, secureFlag.shorthand, false, secureFlag.usage)
+	randgenCmd.MarkFlagRequired(fileFlag.name)
+	randgenCmd.MarkFlagRequired(sizeFlag.name)
+	randgenCmd.AddCommand(verifyCommand())
+	randgenCmd.AddCommand(serveCommand())
+	randgenCmd.AddCommand(versionCommand())
+	return randgenCmd
 }

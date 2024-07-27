@@ -9,13 +9,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func RandGenCommand() *cobra.Command {
-	if randgenCmd != nil {
-		return randgenCmd
+func genCommand() *cobra.Command {
+	if genCmd != nil {
+		return genCmd
 	}
-	randgenCmd = &cobra.Command{
-		Use:   appNameLowerCase,
-		Short: "Generate random files of a given size",
+	genCmd = &cobra.Command{
+		Use:     "gen",
+		Aliases: []string{"generate", "g", "create", "make"},
+		Short:   "Generate random files of a given size",
 		Run: func(cmd *cobra.Command, args []string) {
 			filePath := cmd.Flag(fileFlag.name).Value.String()
 			sizeStr := cmd.Flag(sizeFlag.name).Value.String()
@@ -30,13 +31,10 @@ func RandGenCommand() *cobra.Command {
 			fmt.Printf("File %s created successfully with size %s\n", color.GreenString(filePath), color.GreenString(humanize.Bytes(size)))
 		},
 	}
-	randgenCmd.Flags().StringP(fileFlag.name, fileFlag.shorthand, "", fileFlag.usage)
-	randgenCmd.Flags().StringP(sizeFlag.name, sizeFlag.shorthand, "", sizeFlag.usage)
-	randgenCmd.Flags().BoolP(secureFlag.name, secureFlag.shorthand, false, secureFlag.usage)
-	randgenCmd.MarkFlagRequired(fileFlag.name)
-	randgenCmd.MarkFlagRequired(sizeFlag.name)
-	randgenCmd.AddCommand(verifyCommand())
-	randgenCmd.AddCommand(serveCommand())
-	randgenCmd.AddCommand(versionCommand())
-	return randgenCmd
+	genCmd.Flags().StringP(fileFlag.name, fileFlag.shorthand, "", fileFlag.usage)
+	genCmd.Flags().StringP(sizeFlag.name, sizeFlag.shorthand, "", sizeFlag.usage)
+	genCmd.Flags().BoolP(secureFlag.name, secureFlag.shorthand, false, secureFlag.usage)
+	genCmd.MarkFlagRequired(fileFlag.name)
+	genCmd.MarkFlagRequired(sizeFlag.name)
+	return genCmd
 }

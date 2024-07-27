@@ -31,6 +31,7 @@ var (
 	versionStr *string
 
 	randgenCmd *cobra.Command
+	genCmd     *cobra.Command
 	verifyCmd  *cobra.Command
 	serveCmd   *cobra.Command
 	versionCmd *cobra.Command
@@ -43,6 +44,12 @@ type flagDef struct {
 }
 
 var (
+	versionFlag = flagDef{
+		name:      "version",
+		shorthand: "v",
+		usage:     "Shows version info",
+	}
+
 	fileFlag = flagDef{
 		name:      "file",
 		shorthand: "f",

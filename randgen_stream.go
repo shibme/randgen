@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	blockSize = 1024
+	blockSize = 32 * 1024
 	hashSize  = crc32.Size
 )
 
@@ -82,8 +82,10 @@ func Verify(r io.Reader) error {
 	for n, err = r.Read(block); err == nil; n, err = r.Read(block) {
 		residue = append(residue, block[:n]...)
 		hashableLen := len(residue) - hashSize
-		hasher.Write(residue[:hashableLen])
-		residue = residue[hashableLen:]
+		if hashableLen > 0 {
+			hasher.Write(residue[:hashableLen])
+			residue = residue[hashableLen:]
+		}
 	}
 	if err != io.EOF {
 		return err

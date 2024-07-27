@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	errVerificationFailed = errors.New("the data integrity verification failed")
+	errVerificationFailed = errors.New("the data integrity check failed")
 )
 
 func WriteRand(w io.Writer, size int, secure bool) error {

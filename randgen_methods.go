@@ -1,6 +1,7 @@
 package randgen
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"os"
@@ -37,4 +38,17 @@ func VerifyFile(file string) error {
 	}
 	defer src.Close()
 	return Verify(src)
+}
+
+func GetData(size int, secure bool) ([]byte, error) {
+	reader, err := NewRandReader(size, secure)
+	if err != nil {
+		return nil, err
+	}
+	return io.ReadAll(reader)
+}
+
+func VerifyData(data []byte) error {
+	reader := bytes.NewReader(data)
+	return Verify(reader)
 }

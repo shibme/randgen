@@ -25,10 +25,10 @@ func Serve(port uint16) error {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
-	router.GET("/gen", genRandFile)
-	router.GET("/get", genRandFile)
-	router.GET("/data", genRandFile)
-	router.GET("/rand", genRandFile)
+	router.GET("/file", genRandFile)
+	router.POST("/file", verifyFile)
+	router.GET("/data", genRandData)
+	router.POST("/data", verifyData)
 
 	fmt.Printf("Serving RandGen API on port %d\n", port)
 	return router.Run(":" + fmt.Sprintf("%d", port))

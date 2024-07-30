@@ -5,6 +5,8 @@ import (
 	"errors"
 	"io"
 	"os"
+
+	"github.com/shirou/gopsutil/v4/mem"
 )
 
 var (
@@ -41,6 +43,14 @@ func VerifyFile(file string) (string, error) {
 }
 
 func GetData(size int, secure bool) ([]byte, error) {
+	virtMem, err := mem.VirtualMemory()
+	if err != nil {
+		return nil, err
+	}
+	usable := virtMem.Available / 2
+	if size > int(usable) {
+		return nil, errors.New("requested size is greater than available memory")
+	}
 	reader, err := NewRandReader(size, secure)
 	if err != nil {
 		return nil, err

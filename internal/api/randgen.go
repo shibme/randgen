@@ -13,13 +13,13 @@ import (
 func genRandFile(c *gin.Context) {
 	sizeStr := c.Query("size")
 	if sizeStr == "" {
-		c.String(http.StatusBadRequest, "Missing size parameter")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing size parameter"})
 		return
 	}
 
 	size, err := humanize.ParseBytes(sizeStr)
 	if err != nil {
-		c.String(http.StatusBadRequest, "Invalid size parameter")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -42,7 +42,7 @@ func genRandFile(c *gin.Context) {
 	c.Header("Pragma", "public")
 
 	if err := randgen.WriteRand(c.Writer, int(size), secure); err != nil {
-		c.String(http.StatusInternalServerError, "Unable to download file")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 }
@@ -50,13 +50,13 @@ func genRandFile(c *gin.Context) {
 func genRandData(c *gin.Context) {
 	sizeStr := c.Query("size")
 	if sizeStr == "" {
-		c.String(http.StatusBadRequest, "Missing size parameter")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing size parameter"})
 		return
 	}
 
 	size, err := humanize.ParseBytes(sizeStr)
 	if err != nil {
-		c.String(http.StatusBadRequest, "Invalid size parameter")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -64,7 +64,7 @@ func genRandData(c *gin.Context) {
 
 	data, err := randgen.GetData(int(size), secure)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Unable to generate random data")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.Header("Content-Type", "application/json")

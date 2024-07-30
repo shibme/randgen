@@ -13,11 +13,12 @@ func verifyData(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if err := randgen.VerifyData(req["data"]); err != nil {
+	sum, err := randgen.VerifyData(req["data"])
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "verified"})
+	c.JSON(http.StatusOK, gin.H{"status": "verified", "checksum": sum})
 }
 
 func verifyFile(c *gin.Context) {
@@ -27,10 +28,10 @@ func verifyFile(c *gin.Context) {
 		return
 	}
 	defer file.Close()
-
-	if err = randgen.Verify(file); err != nil {
+	sum, err := randgen.Verify(file)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "verified"})
+	c.JSON(http.StatusOK, gin.H{"status": "verified", "checksum": sum})
 }

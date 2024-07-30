@@ -3,6 +3,7 @@ package randgen
 import (
 	"bytes"
 	cryptorand "crypto/rand"
+	"encoding/hex"
 	"errors"
 	"hash"
 	"hash/crc32"
@@ -73,7 +74,7 @@ func (r *RandReader) Read(p []byte) (int, error) {
 	return n, err
 }
 
-func Verify(r io.Reader) error {
+func Verify(r io.Reader) (string, error) {
 	hasher := crc32.NewIEEE()
 	block := make([]byte, blockSize)
 	var residue []byte
@@ -88,10 +89,11 @@ func Verify(r io.Reader) error {
 		}
 	}
 	if err != io.EOF {
-		return err
+		return "", err
 	}
-	if !bytes.Equal(hasher.Sum(nil), residue) {
-		return errVerificationFailed
+	sum := hasher.Sum(nil)
+	if !bytes.Equal(sum, residue) {
+		return "", errVerificationFailed
 	}
-	return nil
+	return hex.EncodeToString(sum), nil
 }

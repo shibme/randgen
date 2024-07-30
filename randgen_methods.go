@@ -31,10 +31,10 @@ func CreateFile(file string, size int, secure bool) error {
 	return WriteRand(dst, size, secure)
 }
 
-func VerifyFile(file string) error {
+func VerifyFile(file string) (string, error) {
 	src, err := os.Open(file)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer src.Close()
 	return Verify(src)
@@ -48,7 +48,7 @@ func GetData(size int, secure bool) ([]byte, error) {
 	return io.ReadAll(reader)
 }
 
-func VerifyData(data []byte) error {
+func VerifyData(data []byte) (string, error) {
 	reader := bytes.NewReader(data)
 	return Verify(reader)
 }

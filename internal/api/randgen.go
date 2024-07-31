@@ -1,6 +1,8 @@
 package api
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"net/http"
 	"strings"
 	"time"
@@ -27,7 +29,11 @@ func genRandFile(c *gin.Context) {
 	if name == "" {
 		name = c.Query("filename")
 		if name == "" {
-			name = "randfile_" + time.Now().Format("2006_01_02_15_04_05_000")
+			randSuffix := make([]byte, 4)
+			if _, err := rand.Read(randSuffix); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			}
+			name = "randfile_" + time.Now().Format("2006_01_02_15_04_05_000") + "_" + strings.ToLower(hex.EncodeToString(randSuffix))
 		}
 	}
 

@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 
 	"dev.shib.me/randgen"
 	"github.com/dustin/go-humanize"
@@ -25,16 +26,21 @@ func genCommand() *cobra.Command {
 				exitOnError(err)
 			}
 			secure, _ := cmd.Flags().GetBool(secureFlag.name)
-			if err = randgen.CreateFile(filePath, int(size), secure); err != nil {
-				exitOnError(err)
+			if filePath == "" {
+				if err = randgen.WriteRand(os.Stdout, int(size), secure); err != nil {
+					exitOnError(err)
+				}
+			} else {
+				if err = randgen.CreateFile(filePath, int(size), secure); err != nil {
+					exitOnError(err)
+				}
+				fmt.Printf("Random file of size %s created at %s\n", humanize.Bytes(uint64(size)), color.GreenString(filePath))
 			}
-			fmt.Printf("File %s created successfully with size %s\n", color.GreenString(filePath), color.GreenString(humanize.Bytes(size)))
 		},
 	}
 	genCmd.Flags().StringP(fileFlag.name, fileFlag.shorthand, "", fileFlag.usage)
 	genCmd.Flags().StringP(sizeFlag.name, sizeFlag.shorthand, "", sizeFlag.usage)
 	genCmd.Flags().BoolP(secureFlag.name, secureFlag.shorthand, false, secureFlag.usage)
-	genCmd.MarkFlagRequired(fileFlag.name)
 	genCmd.MarkFlagRequired(sizeFlag.name)
 	return genCmd
 }

@@ -4,7 +4,7 @@
 [![Release Status](https://github.com/shibme/randgen/actions/workflows/release.yaml/badge.svg)](https://github.com/shibme/randgen/actions/workflows/release.yaml)
 [![License](https://img.shields.io/github/license/shibme/randgen)](https://github.com/shibme/randgen/blob/main/LICENSE)
 
-RandGen is a simple CLI tool to generate random files of a given size.
+RandGen is a simple CLI tool to generate random data of a given size.
 
 ## CLI Usage
 Download the latest binary from the [releases](https://github.com/shibme/randgen/releases/latest) page and add it to your path.
@@ -12,7 +12,7 @@ Download the latest binary from the [releases](https://github.com/shibme/randgen
 ### Homebrew
 RandGen can be installed with brew using the following command on macOS
 ```zsh
-brew install shibme/lab/randgen
+brew install shibme/tap/randgen
 ```
 
 ### Install Script

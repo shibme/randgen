@@ -60,6 +60,9 @@ brews:
   - ids:
       - randgen
     name: randgen
+    install: |
+      bin.install "{{ .Binary }}"
+      generate_completions_from_executable(bin/"{{ .Binary }}","completion")
     homepage: "https://dev.shib.me/randgen"
     description: "RandGen is a simple CLI tool to generate random data of a given size."
     license: "MIT"

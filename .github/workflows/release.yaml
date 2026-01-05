@@ -12,10 +12,10 @@ jobs:
       - name: Setting RandGen Version
         run: echo "RANDGEN_VERSION=${GITHUB_REF_NAME:1}" >> $GITHUB_ENV
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: 'stable'
       - name: Releasing Demo CLI
@@ -38,7 +38,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
           context: .

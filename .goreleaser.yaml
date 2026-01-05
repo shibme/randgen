@@ -30,8 +30,9 @@ builds:
 archives:
   - id: randgen
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    format: zip
-    builds:
+    formats:
+      - zip
+    ids:
       - randgen
 
 checksum:
